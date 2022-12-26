@@ -39,6 +39,7 @@ Salt = abi.StaticBytes[Literal[32]]
 
 # Just 1 for debugging
 
+
 def demo():
     # Create an Application client
     app_client = client.ApplicationClient(
@@ -90,12 +91,15 @@ def demo():
         print(i)
     print("Added Challenges", "Addres of adder: ")
 
+    # import time
+    # time.sleep(10)
+
     ptxn = PaymentTxn(app_client.sender, suggested_params,
                       app_addr, int(1000000*1.0))
-    result = app_client.call(PromiseYou.resolve_shuffle, payment=TransactionWithSigner(ptxn, signer),
+    result = app_client.call(PromiseYou.resolve_shuffle, random_contract=110096026, payment=TransactionWithSigner(ptxn, signer),
                              boxes=[[app_client.app_id, "permutation"],
                                     [app_client.app_id, "permutation"]])
-    print("Resolved Shuffle")
+    print("Resolved Shuffle", result.return_value)
 
     ptxn = PaymentTxn(app_client.sender, suggested_params,
                       app_addr, int(1000000*1.0))

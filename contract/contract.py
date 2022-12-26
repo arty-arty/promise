@@ -134,40 +134,110 @@ class PromiseYou(Application):
             lock_challenges_if_needed,
         )
 
-    @ external(authorize=Authorize.only(Global.creator_address()))
-    def resolve_shuffle(self, random_contract_call: abi.Application, payment: abi.PaymentTransaction):
+    @internal(TealType.uint64)
+    def KnuthYao(self, n, randomBits, currBitN: ScratchVar):
+        # Outputs a random number Uniform[0, n-1]
+        # Wtihout modulo bias
+        # See publication
+
+        u = ScratchVar(TealType.uint64)
+        x = ScratchVar(TealType.uint64)
+        d = ScratchVar(TealType.uint64)
+        result = ScratchVar(TealType.uint64)
+
+        return Seq(
+            u.store(Int(1)),
+            x.store(Int(0)),
+            result.store(Int(0)),
+            While(Int(1)).Do(Seq(
+                While(u.load() < n).Do(
+                    Seq(
+                        u.store(Int(2)*u.load()),
+                        x.store(Int(2)*x.load() +
+                                GetBit(randomBits, currBitN.load())),
+                        currBitN.store(currBitN.load() + Int(1))
+                    )
+                ),
+                d.store(u.load() - n),
+                If(x.load() >= d.load()).Then(
+                    Seq(result.store(x.load() - d.load()), Break())).Else(
+                        u.store(d.load())
+                )
+            )
+            ),
+            result.load(),
+        )
+
+    @external(authorize=Authorize.only(Global.creator_address()))
+    def resolve_shuffle(self, random_contract: abi.Application, payment: abi.PaymentTransaction, *, output: abi.Uint64):
         # DO INNER TXN to RANDOM BEACON (by using internal method like in joe contract)
         # USE internal method to shuffle refernece article in a comment
         # Modulo Unbiased
-        randomBytes = Seq(
+        randomBits = ScratchVar(TealType.bytes)
+        shuffle_round = abi.Uint64()
+
+        getRandomBits = Seq(
+            # Just for debugging to be faster, TODO: remove later
+            shuffle_round.set(self.shuffle_round.get() - Int(10)),
             InnerTxnBuilder.Begin(),
             InnerTxnBuilder.MethodCall(
-                app_id=random_contract_call.application_id(),
-                method_signature="get(uint64,byte[])byte[]",
-                args=[Itob(self.shuffle_round.get()),
+                app_id=random_contract.application_id(),
+                method_signature="must_get(uint64,byte[])byte[]",
+                # args=[Itob(self.shuffle_round.get()),
+                args=[shuffle_round,
                       Global.current_application_address()]
             ),
+            InnerTxnBuilder.Submit(),
+            randomBits.store(InnerTxn.last_log())
         )
+        currBitN = ScratchVar(TealType.uint64)
 
-        InnerTxnBuilder.Submit(),
         i = ScratchVar(TealType.uint64)
         init = i.store(Int(0))
         cond = i.load() < Int(self.n_challenges_total)
         iter = i.store(i.load() + Int(1))
-        loop = For(init, cond, iter).Do(
+        initPermutation = For(init, cond, iter).Do(
             Seq(
                 (f_i := abi.Uint16()).set(i.load()),
                 self.permutation[i.load()].set(f_i),
             )
         )
+
+        j = ScratchVar(TealType.uint64)
+        shufflePermutation = For(i.store(Int(self.n_challenges_total)), i.load() >= Int(2), i.store(i.load() - Int(1))).Do(
+            Seq(
+                j.store(Int(1) + self.KnuthYao(i.load(),
+                        randomBits.load(), currBitN) - Int(1)),
+                self.permutation[i.load() - Int(1)
+                                 ].store_into(temp_i := abi.Uint16()),
+                self.permutation[j.load() -
+                                 Int(1)].store_into(temp_j := abi.Uint16()),
+                self.permutation[i.load() - Int(1)
+                                 ].set(temp_j),
+                self.permutation[j.load() - Int(1)].set(temp_i),
+            )
+        )
         return Seq(
             Assert(self.status == Bytes("2_RESOLVE_PRNG_SHUFFLE")),
-            Assert(random_contract_call.application_id() == Int(110096026)),
-
+            Assert(random_contract.application_id() == Int(110096026)),
+            # TODO increse to >
             Assert(Global.round() >= self.shuffle_round.get()),
+            getRandomBits,
+            # Because of ARC-4 first 4 bytes are a type prefix, so skip them
+            # For some reason beacon gives 38 bytes so 6 bytes are extra for types
+            currBitN.store(Int(32 + 32)),
             Pop(self.permutation.create()),
-            loop,
-            self.status.set(Bytes("3_SOLVE_CHALLENGES"))
+            initPermutation,
+            shufflePermutation,
+            output.set(Btoi(self.permutation[Int(0)].get(
+            )) + Int(10) * Btoi(self.permutation[Int(1)].get())),
+            # + Int(100) * Btoi(self.permutation[Int(2)].get())
+            # Output the permutation list bytes, and decode them later in python,
+            self.status.set(Bytes("3_SOLVE_CHALLENGES")),
+            # output.set(self.KnuthYao(i.load(), randomBits.load(), currBitN))
+            # output.set(Btoi(Substring(randomBits.load(), Int(6), Int(12))))
+            # # output.set(GetBit(randomBits.load(), Int(32)) + Int(2) * GetBit(randomBits.load(), Int(33)) +
+            # #            Int(4) * GetBit(randomBits.load(), Int(34)))
         )
 
     # Account.addres + concat Bytes("STATE")
