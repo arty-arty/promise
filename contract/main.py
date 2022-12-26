@@ -83,7 +83,7 @@ def demo():
     atc.add_transaction(TransactionWithSigner(ptxn, signer))
     result = atc.execute(algod_client, 4)
 
-    for i in range(0, 2):
+    for i in range(0, 3):
         app_client.call(PromiseYou.add_challenge, salted_question_hash=question_hash,
                         salted_answer_hash=answer_hash,
                         boxes=[[app_client.app_id, "salted_question_hashes"],
@@ -101,64 +101,64 @@ def demo():
                                     [app_client.app_id, "permutation"]])
     print("Resolved Shuffle", result.return_value)
 
-    ptxn = PaymentTxn(app_client.sender, suggested_params,
-                      app_addr, int(1000000*1.0))
-    result = app_client.call(
-        PromiseYou.book_challenge,
-        payment=TransactionWithSigner(ptxn, signer),
-        boxes=[[app_client.app_id, "STATE".encode() + decode_address(app_client.sender)],
-               [app_client.app_id, "POST_ROUND".encode(
-               ) + decode_address(app_client.sender)]
-               ])
-    print("Booked Challenge")
+    # ptxn = PaymentTxn(app_client.sender, suggested_params,
+    #                   app_addr, int(1000000*1.0))
+    # result = app_client.call(
+    #     PromiseYou.book_challenge,
+    #     payment=TransactionWithSigner(ptxn, signer),
+    #     boxes=[[app_client.app_id, "STATE".encode() + decode_address(app_client.sender)],
+    #            [app_client.app_id, "POST_ROUND".encode(
+    #            ) + decode_address(app_client.sender)]
+    #            ])
+    # print("Booked Challenge")
 
-    result = app_client.call(PromiseYou.post_challenge, booker=app_client.sender,
-                             question="Who created Algorand?".ljust(
-                                 32, " ").encode(),
-                             salt="fasdfsda".ljust(32, " ").encode(),
-                             boxes=[[app_client.app_id, "permutation"],
-                                    [app_client.app_id, "permutation"],
-                                    [app_client.app_id, "salted_question_hashes"],
-                                    [app_client.app_id, "STATE".encode(
-                                    ) + decode_address(app_client.sender)],
-                                    [app_client.app_id, "ANSWER_ROUND".encode(
-                                    ) + decode_address(app_client.sender)],
-                                    [app_client.app_id, "ID".encode(
-                                    ) + decode_address(app_client.sender)]
-                                    ])
-    print("Posted challenge")
+    # result = app_client.call(PromiseYou.post_challenge, booker=app_client.sender,
+    #                          question="Who created Algorand?".ljust(
+    #                              32, " ").encode(),
+    #                          salt="fasdfsda".ljust(32, " ").encode(),
+    #                          boxes=[[app_client.app_id, "permutation"],
+    #                                 [app_client.app_id, "permutation"],
+    #                                 [app_client.app_id, "salted_question_hashes"],
+    #                                 [app_client.app_id, "STATE".encode(
+    #                                 ) + decode_address(app_client.sender)],
+    #                                 [app_client.app_id, "ANSWER_ROUND".encode(
+    #                                 ) + decode_address(app_client.sender)],
+    #                                 [app_client.app_id, "ID".encode(
+    #                                 ) + decode_address(app_client.sender)]
+    #                                 ])
+    # print("Posted challenge")
 
-    result = app_client.call(PromiseYou.answer_challenge,
-                             answer="Silvio Micali".ljust(32, " ").encode(),
-                             boxes=[
-                                 [app_client.app_id, "STATE".encode(
-                                 ) + decode_address(app_client.sender)],
-                                 [app_client.app_id, "REVEAL_ROUND".encode(
-                                 ) + decode_address(app_client.sender)],
-                                 [app_client.app_id, "ANSWER".encode(
-                                 ) + decode_address(app_client.sender)]
-                             ])
-    print("Answered challenge")
+    # result = app_client.call(PromiseYou.answer_challenge,
+    #                          answer="Silvio Micali".ljust(32, " ").encode(),
+    #                          boxes=[
+    #                              [app_client.app_id, "STATE".encode(
+    #                              ) + decode_address(app_client.sender)],
+    #                              [app_client.app_id, "REVEAL_ROUND".encode(
+    #                              ) + decode_address(app_client.sender)],
+    #                              [app_client.app_id, "ANSWER".encode(
+    #                              ) + decode_address(app_client.sender)]
+    #                          ])
+    # print("Answered challenge")
 
-    result = app_client.call(PromiseYou.reveal_answer, booker=app_client.sender,
-                             answer="Silvio Micali".ljust(
-                                 32, " ").encode(),
-                             salt="yh66534".ljust(32, " ").encode(),
-                             boxes=[[app_client.app_id, "permutation"],
-                                    [app_client.app_id, "permutation"],
-                                    [app_client.app_id, "salted_answer_hashes"],
-                                    [app_client.app_id, "STATE".encode(
-                                    ) + decode_address(app_client.sender)],
-                                    [app_client.app_id, "ANSWER_ROUND".encode(
-                                    ) + decode_address(app_client.sender)],
-                                    [app_client.app_id, "ID".encode(
-                                    ) + decode_address(app_client.sender)],
-                                    [app_client.app_id, "ANSWER".encode(
-                                    ) + decode_address(app_client.sender)]
-                                    ],
-                             )
+    # result = app_client.call(PromiseYou.reveal_answer, booker=app_client.sender,
+    #                          answer="Silvio Micali".ljust(
+    #                              32, " ").encode(),
+    #                          salt="yh66534".ljust(32, " ").encode(),
+    #                          boxes=[[app_client.app_id, "permutation"],
+    #                                 [app_client.app_id, "permutation"],
+    #                                 [app_client.app_id, "salted_answer_hashes"],
+    #                                 [app_client.app_id, "STATE".encode(
+    #                                 ) + decode_address(app_client.sender)],
+    #                                 [app_client.app_id, "ANSWER_ROUND".encode(
+    #                                 ) + decode_address(app_client.sender)],
+    #                                 [app_client.app_id, "ID".encode(
+    #                                 ) + decode_address(app_client.sender)],
+    #                                 [app_client.app_id, "ANSWER".encode(
+    #                                 ) + decode_address(app_client.sender)]
+    #                                 ],
+    #                          )
 
-    print("Revealed answer")
+    # print("Revealed answer")
     # Output in revelation who won how much
 
     # Refactor methods in a separate file which do for any account all those interaction stages

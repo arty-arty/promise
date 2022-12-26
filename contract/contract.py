@@ -37,7 +37,7 @@ class PromiseYou(Application):
         default=Int(2**64 - 1)
     )
 
-    n_challenges_total = int(2)
+    n_challenges_total = int(3)
     permutation = List(abi.Uint16, n_challenges_total)
     # 16 bit = 2 byte
     # In a 32 K bytes box --> 16000 variables max
@@ -207,7 +207,7 @@ class PromiseYou(Application):
         shufflePermutation = For(i.store(Int(self.n_challenges_total)), i.load() >= Int(2), i.store(i.load() - Int(1))).Do(
             Seq(
                 j.store(Int(1) + self.KnuthYao(i.load(),
-                        randomBits.load(), currBitN) - Int(1)),
+                        randomBits.load(), currBitN)),
                 self.permutation[i.load() - Int(1)
                                  ].store_into(temp_i := abi.Uint16()),
                 self.permutation[j.load() -
@@ -229,15 +229,8 @@ class PromiseYou(Application):
             Pop(self.permutation.create()),
             initPermutation,
             shufflePermutation,
-            output.set(Btoi(self.permutation[Int(0)].get(
-            )) + Int(10) * Btoi(self.permutation[Int(1)].get())),
-            # + Int(100) * Btoi(self.permutation[Int(2)].get())
-            # Output the permutation list bytes, and decode them later in python,
             self.status.set(Bytes("3_SOLVE_CHALLENGES")),
-            # output.set(self.KnuthYao(i.load(), randomBits.load(), currBitN))
-            # output.set(Btoi(Substring(randomBits.load(), Int(6), Int(12))))
-            # # output.set(GetBit(randomBits.load(), Int(32)) + Int(2) * GetBit(randomBits.load(), Int(33)) +
-            # #            Int(4) * GetBit(randomBits.load(), Int(34)))
+        
         )
 
     # Account.addres + concat Bytes("STATE")
