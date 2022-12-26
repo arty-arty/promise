@@ -10,6 +10,7 @@ Answer = abi.StaticBytes[Literal[32]]
 Question = abi.StaticBytes[Literal[32]]
 Salt = abi.StaticBytes[Literal[32]]
 
+
 class PromiseYou(Application):
 
     n_challenges_added: Final[ApplicationStateValue] = ApplicationStateValue(
@@ -74,6 +75,17 @@ class PromiseYou(Application):
             }
         )
 
+    @internal(TealType.none)
+    def pay(self, receiver: Expr, amount: Expr):
+        return InnerTxnBuilder.Execute(
+            {
+                TxnField.type_enum: TxnType.Payment,
+                TxnField.receiver: receiver,
+                TxnField.amount: amount,
+                TxnField.fee: consts.Algos(0.001),
+            }
+        )
+
     @create
     def create(self):
         return Seq(
@@ -123,10 +135,21 @@ class PromiseYou(Application):
         )
 
     @ external(authorize=Authorize.only(Global.creator_address()))
-    def resolve_shuffle(self, payment: abi.PaymentTransaction):
+    def resolve_shuffle(self, random_contract_call: abi.Application, payment: abi.PaymentTransaction):
         # DO INNER TXN to RANDOM BEACON (by using internal method like in joe contract)
         # USE internal method to shuffle refernece article in a comment
         # Modulo Unbiased
+        randomBytes = Seq(
+            InnerTxnBuilder.Begin(),
+            InnerTxnBuilder.MethodCall(
+                app_id=random_contract_call.application_id(),
+                method_signature="get(uint64,byte[])byte[]",
+                args=[Itob(self.shuffle_round.get()),
+                      Global.current_application_address()]
+            ),
+        )
+
+        InnerTxnBuilder.Submit(),
         i = ScratchVar(TealType.uint64)
         init = i.store(Int(0))
         cond = i.load() < Int(self.n_challenges_total)
@@ -139,6 +162,8 @@ class PromiseYou(Application):
         )
         return Seq(
             Assert(self.status == Bytes("2_RESOLVE_PRNG_SHUFFLE")),
+            Assert(random_contract_call.application_id() == Int(110096026)),
+
             Assert(Global.round() >= self.shuffle_round.get()),
             Pop(self.permutation.create()),
             loop,
