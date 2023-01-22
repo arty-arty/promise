@@ -18,21 +18,33 @@ Why should we blockchainify games at all? What does it even mean?
 
 Something never possible before blockchain happens. Let's see what Promise brings in.
 
-Before chains:
-There
+**Auto money back on non-delivery** 
+> Before chains:
+> There are a lot of complaints on Google Play. Paid features are often not working.
+>
+> After:
+> Promise auto-returns escrowed money, if the level was not delivered to the user. There is no other way around. 
 
-Before chains:
-The game 
+**Auto payout on win**
+> Before chains:
+>  Games often just change the rules in the middle. Out of nowhere, they could drastically cut the payout. 
+>
+> After:
+> There is an algorithmic commitment. Promise escrows the money. There is no other way. Users are always auto-payed for the right answer. 
 
-After:
-The game has an algorithmic commitment. Promise escrows . There is no other way. Users are always auoto-payed for the right answer. 
+**Auto content quality check**
+> Before chains:
+> The game 
+>
+> After:
+> Promise shuffles the levels using Algorand's Verifiable Random Functions. Before payment, every user gets a fair sneak peak of the random levels. 
+> Statistically the user gets the same high-quality for paid levels.
 
 
-> . The game can statistically Promise that the questions/levels would be as high-quality as examples marketed to the user. You will get what was Promised.
-
-Click the link to see a demo game protected by Promise.
+That's why with Promise you get what you are Promised.
 
 ## A game content escrow 
+Click the link to see a demo game protected by Promise.
 ### Safe
 
 From a technical point of view Promise is a gaming escrow. First, it guarantees payout/decincentivizes any fraud. Second, it makes sure 
