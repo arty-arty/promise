@@ -1,28 +1,42 @@
 # 💍 Promise 
 
-Safely blochainify any puzzle game. 
+Safely blockchainify any puzzle game. 
 
 ## Original technology
 
-
+The protocol combines an pair. Both developed for this project.
 
 ## A mathematical protocol 
 
 There are games to tell stories. There are games to solve mysteries. If there is only one way to solve a level - only one answer - then Promise works.
+
 Any such game old or new can, actually, be run on-chain. 
-It can be placing mirrors to guide the laser through the labirynth. It can be finding one concept which unites four pictures. It can be guessing which brand is on the logo. We present a general solution to rule them all!
+It can be placing mirrors to guide the laser through the labirynth. It can be finding one concept which unites four pictures. It can be guessing which brand is on the logo. We present a general solution to rule them all.
 
-Why should we blochainify what is not broken? 
+## A must
+Why should we blockchainify games at all? What does it even mean?
 
-> Something never possible pre-blockchain happens. The game can algorithmically Promise payout or scores for the right answer. The game can statistically Promise that the questions/levels would be as high-quality as examples marketed to the user. You will get what was Promised.
+Something never possible before blockchain happens. Let's see what Promise brings in.
+
+Before chains:
+There
+
+Before chains:
+The game 
+
+After:
+The game has an algorithmic commitment. Promise escrows . There is no other way. Users are always auoto-payed for the right answer. 
+
+
+> . The game can statistically Promise that the questions/levels would be as high-quality as examples marketed to the user. You will get what was Promised.
 
 Click the link to see a demo game protected by Promise.
 
 ## A game content escrow 
 ### Safe
 
-From a technical point of view Promise is a gaming escrow which first gurantees payout/decincentivizes any fraud, second makes sure 
-the content quality is even. How can a machine feel the quality? Actually, it can't. But, the user might get a fair sneak peak to decide.
+From a technical point of view Promise is a gaming escrow. First, it guarantees payout/decincentivizes any fraud. Second, it makes sure 
+the content quality is the same as Promised by examples. How can a machine feel the quality? Actually, it can't. But, the user might get a fair sneak peak to decide.
 Promise provides random examples of levels before the user pays. The levels are randomly shuffled. So, if the user loved those examples, most likely 
 paid ones will be enjoyable as well. 
 
