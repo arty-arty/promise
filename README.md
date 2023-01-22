@@ -4,7 +4,7 @@ Safely blockchainify any puzzle game.
 
 ## Original technology
 
-The protocol combines an pair. Both developed for this project.
+The protocol combines two new technologies. A paired-content-escrow. A random-sneak-peek. Both were researched for this project.
 
 ## A mathematical protocol 
 
@@ -37,18 +37,19 @@ Something never possible before blockchain happens. Let's see what Promise bring
 > The game 
 >
 > After:
-> Promise shuffles the levels using Algorand's Verifiable Random Functions. Before payment, every user gets a fair sneak peak of the random levels. 
+> Promise shuffles the levels using Algorand's Verifiable Random Functions. Before payment, every user gets a fair sneak peek of the random levels. 
 > Statistically the user gets the same high-quality for paid levels.
 
 
 That's why with Promise you get what you are Promised.
 
-## A game content escrow 
+## A content-pair escrow
 Click the link to see a demo game protected by Promise.
 ### Safe
+A content pair escrow.
 
 From a technical point of view Promise is a gaming escrow. First, it guarantees payout/decincentivizes any fraud. Second, it makes sure 
-the content quality is the same as Promised by examples. How can a machine feel the quality? Actually, it can't. But, the user might get a fair sneak peak to decide.
+the content quality is the same as Promised by examples. How can a machine feel the quality? Actually, it can't. But, the user might get a fair sneak peek to decide.
 Promise provides random examples of levels before the user pays. The levels are randomly shuffled. So, if the user loved those examples, most likely 
 paid ones will be enjoyable as well. 
 
@@ -68,7 +69,7 @@ One half of Promise is an escrow with hashed challenge-response pairs. It deince
 This fair scheme is enforced via a state machine implemented in the contract.
 The only seeming caveat after this step: what if levels are bad/dumb/fake? What if pre-loaded question-answer pairs are boring or factually incorrect? If the question was "Who invented the light bulb?", the malicious answer could be "hahagametrickedyouandtooksomemoney". Actually, it is handled by the other half of Promise.
 
-# A 
+# A permutation-invariant-
 
 It is handled by
 
