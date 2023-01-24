@@ -32,16 +32,20 @@ Something never possible before blockchain happens. Let's see what Promise bring
 > After:
 > There is an algorithmic commitment. Promise escrows the money. There is no other way. Users are always auto-payed for the right answer. 
 
+That's why with Promise you get what you are Promised. It not only offers protection for the user. 
+Unlike many client-side P2E games, Promise protected games are immune to all sorts of client-side memory hacks.
+
 **Auto content quality check**
 > Before chains:
-> The game 
+> The game makes junk. It does not care about you a what you like. Examples fall far from actual gameplay. Like in those Candy Crush ads.
+> Players are disappointed when their expectations meet ugly gameplay in reality.
 >
 > After:
 > Promise shuffles the levels using Algorand's Verifiable Random Functions. Before payment, every user gets a fair sneak peek of the random levels. 
 > Statistically the user gets the same high-quality for paid levels.
 
-
-That's why with Promise you get what you are Promised.
+Soon, neural networks are going to disrupt the gaming industry. Imagine, auto-generated content tailored for your personality. There has to be a way to safely sell and buy such personal content.  
+This way to check quality, without losing funds, is Promise.
 
 ## A content-pair escrow
 <!-- Click the link to see a demo game protected by Promise.
@@ -77,6 +81,8 @@ Bytes("3_SOLVE_CHALLENGES")
 # Like this
 Assert(self.status == Bytes("1_ADD_CHALLENGES"))
 ```
+
+Mostly during the interaction, individual state of each user matters. It allows to avoid a queue and just use an incremental counter plus random permuation:
 
 ```python
 # Individual state of each user 
