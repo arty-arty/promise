@@ -64,15 +64,42 @@ One half of Promise is an escrow with hashed challenge-response pairs. It deince
 6. If [player's answer matched](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L350) the oracle answer then he receives a prize. Otherwise oracle just takes his payment. 
 7. This question-pair now remains open to everyone. It was a random one, so represents the overall quality of the game. With each play the reputation of the game grows.
 
-This fair scheme is enforced via a state machine implemented in the contract.
-The only seeming caveat after this step: what if levels are bad/dumb/fake? What if pre-loaded question-answer pairs are boring or factually incorrect? If the question was "Who invented the light bulb?", the malicious answer could be "hahagametrickedyouandtooksomemoney". Actually, it is handled by the other half of Promise.
+This fair scheme is enforced via a state machine implemented in the contract:
 
-# A random-sneak-peek
+```python
+# Global state of the contract
+# Might be 
+Bytes("1_ADD_CHALLENGES")
+Bytes("2_RESOLVE_PRNG_SHUFFLE")
+Bytes("3_SOLVE_CHALLENGES")
 
-Let's say there are 100 question-answer pairs. They are pre-commited . Then after shuffling fairly with VRF, we might reveal a quater of them.
+# Each method validates the state before execution
+# Like this
+Assert(self.status == Bytes("1_ADD_CHALLENGES"))
+```
 
+```python
+# Individual state of each user 
+# Saved in a box to avoid local storage opt-in
+# Might be 
+Bytes("1_NON_BOOKED")
+Bytes("2_YES_BOOKED")
+Bytes("3_YES_POSTED")
+Bytes("4_YES_ANSWED")
 
-The other half is shuffler of challenges, which using Verifiable Random Functions, randomly permutates i.e shuffling them.
+# Each external method validates and switches the state
+# According to paired-content-escrow and random-sneak-peek logic
+```
+
+## A random-sneak-peek
+
+The only seeming caveat after this step: what if levels are bad/dumb/fake? What if pre-loaded question-answer pairs are boring or factually incorrect? 
+
+If the question was "Who invented the light bulb?", the malicious answer could be "hahagametrickedyouandtooksomemoney". The other half of Promise got you covered.
+
+Let's say there are 100 question-answer pairs. They are pre-commited. Then after shuffling fairly with VRF, we might reveal a quater of them. Let's call them examples. If the user likes them. Then statistically paid levels are likely to be same high-quality.
+
+Algorithmically speaking:
 1. A set of N question-answer pair hashes are pre-loaded into the contract.
 2. The state is changed so no new questions can be added. Plus, a future round to 
 3. The VRF
