@@ -45,8 +45,6 @@ That's why with Promise you get what you are Promised.
 
 ## A content-pair escrow
 Click the link to see a demo game protected by Promise.
-### Safe
-A content pair escrow.
 
 From a technical point of view Promise is a gaming escrow. First, it guarantees payout/decincentivizes any fraud. Second, it makes sure 
 the content quality is the same as Promised by examples. How can a machine feel the quality? Actually, it can't. But, the user might get a fair sneak peek to decide.
@@ -58,22 +56,21 @@ receives his own personal generated level. There has to be a way to safely sell 
 
 One half of Promise is an escrow with hashed challenge-response pairs. It deincentivizes lying and non-participation for game company and player, guarantees payouts for right answers. This is not a regular escrow, but has a very particular player / game interaction scheme:
 
-1. The player books a question.
-2. The oracle has to reveal question's plain text. It has to match the question hash. The plain text can be a link to ipfs with a picture or a whole level folder.
-3. If the oracle does not respond in time, player is eligible to call a money-back method.
-4. The player sees the question and has to answer before timeout. Otherwise oracle can take his payment.
-5. The oracle has to reveal the true (matching the hash) answer before timeout. Otherwise the player receives a compensation.
-6. If player's answer matched the oracle answer then he receives a prize. Otherwise oracle just takes his payment. 
+1. The player [books a question](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L242).
+2. The oracle has to [reveal question's plain text](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L267). It has to match the question hash. The plain text can be a link to ipfs with a picture or a whole level folder.
+3. If the [oracle does not respond](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L293) in time, player is eligible to call a money-back method.
+4. The player sees the question and has to [answer](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L307) before timeout. Otherwise [oracle can take his payment](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L355).
+5. The oracle has to reveal the true (matching the hash) answer before timeout. Otherwise the [player receives a compensation](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L361).
+6. If [player's answer matched](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L350) the oracle answer then he receives a prize. Otherwise oracle just takes his payment. 
 7. This question-pair now remains open to everyone. It was a random one, so represents the overall quality of the game. With each play the reputation of the game grows.
 
 This fair scheme is enforced via a state machine implemented in the contract.
 The only seeming caveat after this step: what if levels are bad/dumb/fake? What if pre-loaded question-answer pairs are boring or factually incorrect? If the question was "Who invented the light bulb?", the malicious answer could be "hahagametrickedyouandtooksomemoney". Actually, it is handled by the other half of Promise.
 
-# A permutation-invariant-
+# A random-sneak-peek
 
-It is handled by
+Let's say there are 100 question-answer pairs. They are pre-commited . Then after shuffling fairly with VRF, we might reveal a quater of them.
 
-Let's say there are 100 question-answer pairs. They are pre-commited . Then
 
 The other half is shuffler of challenges, which using Verifiable Random Functions, randomly permutates i.e shuffling them.
 1. A set of N question-answer pair hashes are pre-loaded into the contract.
