@@ -18,22 +18,23 @@ Why should we blockchainify games at all? What does it even mean?
 
 Something never possible before blockchain happens. Let's see what Promise brings in.
 
+**Auto payout on win**
+> Before chains:
+>  Games often just change the rules in the middle. Out of nowhere, they could drastically cut the payout. There's a [whole list of P2E scams](https://cointelegraph.com/news/scams-in-gamefi-how-to-identify-toxic-nft-gaming-projects) that could be easily avoided by using Promise. 
+>  
+>
+> After:
+> There is an algorithmic commitment. Promise escrows the money. There is no other way. Users are always auto-payed for the right answer. If the project is protected by Promise, it can be trusted.
+
+That's why with Promise you get what you are Promised. It not only offers protection for the user. 
+Unlike many client-side P2E games, Promise protected games are immune to all sorts of client-side memory hacks.
+
 **Auto money back on non-delivery** 
 > Before chains:
 > There are a lot of complaints on Google Play. Paid features are often not working.
 >
 > After:
 > Promise auto-returns escrowed money, if the level was not delivered to the user. There is no other way around. 
-
-**Auto payout on win**
-> Before chains:
->  Games often just change the rules in the middle. Out of nowhere, they could drastically cut the payout. 
->
-> After:
-> There is an algorithmic commitment. Promise escrows the money. There is no other way. Users are always auto-payed for the right answer. 
-
-That's why with Promise you get what you are Promised. It not only offers protection for the user. 
-Unlike many client-side P2E games, Promise protected games are immune to all sorts of client-side memory hacks.
 
 **Auto content quality check**
 > Before chains:
@@ -44,8 +45,12 @@ Unlike many client-side P2E games, Promise protected games are immune to all sor
 > Promise shuffles the levels using Algorand's Verifiable Random Functions. Before payment, every user gets a fair sneak peek of the random levels. 
 > Statistically the user gets the same high-quality for paid levels.
 
-Soon, neural networks are going to disrupt the gaming industry. Imagine, auto-generated content tailored for your personality. There has to be a way to safely sell and buy such personal content.  
-This way to check quality, without losing funds, is Promise.
+Soon, neural networks are going to disrupt the gaming industry. Imagine, auto-generated content tailored for your personality. There has to be a way to safely sell and buy such personal content. 
+
+Unfortunately there is no guarantee that  
+For example, some apps dumb down generation from GPT-3 to GPT-2 to save costs.
+
+Actually there is a way to check quality, without losing funds. It is Promise. In particular its random sneak pic feature.
 
 ## A content-pair escrow
 <!-- Click the link to see a demo game protected by Promise.
