@@ -97,15 +97,14 @@ The only seeming caveat after this step: what if levels are bad/dumb/fake? What 
 
 If the question was "Who invented the light bulb?", the malicious answer could be "hahagametrickedyouandtooksomemoney". The other half of Promise got you covered.
 
-Let's say there are 100 question-answer pairs. They are pre-commited. Then after shuffling fairly with VRF, we might reveal a quater of them. Let's call them examples. If the user likes them. Then statistically paid levels are likely to be same high-quality.
+Let's say there are 100 question-answer pairs. They are pre-commited. Then after shuffling fairly with VRF, we might reveal a quater of them. Let's call them examples. If the user likes them. Then, statistically, paid levels are likely to be same high-quality.
 
 Algorithmically speaking:
-1. A set of N question-answer pair hashes are pre-loaded into the contract.
-2. The state is changed so no new questions can be added. Plus, a future round to 
+1. A set of N question-answer [pair hashes are pre-loaded](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L109) into the contract.
+2. The [state is changed](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L121), so no new questions can be added. Plus, a future [round of random beacon resolution](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L125) is set. 
 3. The VRF
-4. Knuth-Rao array shuffle is used to permute an array of 1..N. Let's call this permutation $\phi[i]$
-5. The state is changed to allow players book challenges. Each next player books $\phi[i + 1]$ question. Which means questions are randomly shuffled.
-6. Additional
+4. [Knuth-Yao](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L138) array shuffle is used to [permute an array](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L207) of 1..N. Let's call this permutation $\phi[i]$
+5. The [state is changed](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L232) to allow players book challenges. Each next player books $\phi[i + 1]$ question. Which means questions are randomly shuffled.
 
 From a cryptography point of view it's an attempt to 
 the statistical verification
