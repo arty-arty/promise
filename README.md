@@ -115,5 +115,36 @@ Algorithmically speaking:
 4. The [state is changed](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L232) to allow players book challenges. Each next player books $\phi[i + 1]$ question. Which means questions are randomly shuffled. The contract is ready to serve users.
 
 
-# 
+<!-- ## A revolutionary experience
 
+Here is a synopsis for players.
+
+Promise is a revolutionary new way to play games and get rewarded for being right. With Promise, you can be sure that your answers will be judged fairly and without bias, and that you will get rewarded for being correct. It also ensures that the levels provided by game companies are of high quality and entertaining. With Promise, you can trust that your gaming experience will be fun and fair. 
+You can now play games with confidence, knowing that you will be rewarded for your hard work. Play today and start winning with Promise!
+
+## A synopsis for developers
+
+Here is a synopsis for developers.
+To summarize, the contract in this repository is universal. 
+You can use it to create a platform for any game that requires solving challenges. The contract's code is designed for easy deployment, and it can be easily connected to your project. 
+
+The contract provides a fair environment for both game companies and players, ensuring both parties get paid for correct answers. It also encourages honest participation with its hashed challenge-response pairs and money-back method. And the random-sneak-peek feature ensures that the levels are of high quality.
+It allows to implement any type of game as a series of question-answer pairs, shuffled randomly with VFR, and enforced by the contract. 
+
+The contract also provides a set of methods for users to book and answer questions, as well as the game company to post questions and rewards. 
+
+The contract also provides a set of methods for users to verify the integrity of questions, such as the random-sneak-peek, which allows players to see a small sample of questions before investing time and money. 
+
+If you're interested in using Promise, we invite you to take a look at the source code and consider whether it may be suitable for your game.
+It allows to build a game with the following features:
+
+1. Hashed challenge-response pairs to deincentivize lying and non-participation for game company and player.
+2. Money-back guarantee for player in case of oracle's failure.
+3. Random sneak peek to provide an insight into what is going to be paid prior to payment. 
+4. Fairness in the queue system, so each person can have his own chance without waiting in a queue.
+5. Reputation system based on the number of solved challenges. 
+
+To use it, you should:
+1. Preload your questions into the contract (see `preload_questions` method). It is possible to upload questions one after another, but it is more efficient to preload a couple at once. It is important that you get the initial set of questions right because it will be used for random sneak peek;
+2. Set up number of challenges you want to reveal as examples; 
+3. Start the contract and start playing! -->
