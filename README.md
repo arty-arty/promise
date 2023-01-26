@@ -38,19 +38,17 @@ Unlike many client-side P2E games, Promise protected games are immune to all sor
 
 **Auto content quality check**
 > Before chains:
-> The game makes junk. It does not care about you a what you like. Examples fall far from actual gameplay. Like in those Candy Crush ads.
+> The game has inconsistent quality levels. Or examples fall far from actual gameplay. Like in those misleading Candy Crush clone ads. Seems like the devlopers just do not care. 
 > Players are disappointed when their expectations meet ugly gameplay in reality.
 >
 > After:
 > Promise shuffles the levels using Algorand's Verifiable Random Functions. Before payment, every user gets a fair sneak peek of the random levels. 
 > Statistically the user gets the same high-quality for paid levels.
 
-Soon, neural networks are going to disrupt the gaming industry. Imagine, auto-generated content tailored for your personality. There has to be a way to safely sell and buy such personal content. 
+Soon, neural networks are going to disrupt the gaming industry. Imagine, auto-generated content tailored for your personality. There has to be a way to safely sell and buy such personal content. Unfortunately there is no guarantee. For example, some apps dumb down generation from GPT-3 to GPT-2 to save costs.
+ 
 
-Unfortunately there is no guarantee that  
-For example, some apps dumb down generation from GPT-3 to GPT-2 to save costs.
-
-Actually there is a way to check quality, without losing funds. It is Promise. In particular its random sneak pic feature.
+Actually there is a way to ensure quality, without losing funds. It is Promise. In particular its random sneak pick feature.
 
 ## A content-pair escrow
 <!-- Click the link to see a demo game protected by Promise.
@@ -87,7 +85,7 @@ Bytes("3_SOLVE_CHALLENGES")
 Assert(self.status == Bytes("1_ADD_CHALLENGES"))
 ```
 
-Mostly during the interaction, individual state of each user matters. It allows to avoid a queue and just use an incremental counter plus random permuation:
+Individual state of each user matters. It allows to avoid a queue and gracefully serve each person:
 
 ```python
 # Individual state of each user 
@@ -113,17 +111,9 @@ Let's say there are 100 question-answer pairs. They are pre-commited. Then after
 Algorithmically speaking:
 1. A set of N question-answer [pair hashes are pre-loaded](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L109) into the contract.
 2. The [state is changed](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L121), so no new questions can be added. Plus, a future [round of random beacon resolution](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L125) is set. 
-3. The VRF
-4. [Knuth-Yao](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L138) array shuffle is used to [permute an array](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L207) of $[1, 2, .., N]$. Let's call this permutation $\phi[i]$
-5. The [state is changed](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L232) to allow players book challenges. Each next player books $\phi[i + 1]$ question. Which means questions are randomly shuffled.
+3. [Knuth-Yao](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L138) array shuffle, utilising random bits from VFR proof, is used to [permute an array](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L207) of $[1, 2, .., N]$. Let's call this permutation $\phi[i]$
+4. The [state is changed](https://github.com/arty-arty/promise/blob/fe3d97e3c8fc8835e5f59b93a5c108b96d82adbd/contract/contract.py#L232) to allow players book challenges. Each next player books $\phi[i + 1]$ question. Which means questions are randomly shuffled. The contract is ready to serve users.
 
-From a cryptography point of view it's an attempt to 
-the statistical verification
 
-The verification looks
-1.
-2.
-
-#Mark code lines for each 1. step 
-
+# 
 
