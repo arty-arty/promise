@@ -1,6 +1,6 @@
 # 💍 Promise 
 
-Safely blockchainify any puzzle game. 
+Safely blockchainify any puzzle game with Algorand.
 
 ## Original technology
 
@@ -12,10 +12,10 @@ An unbiased PyTeal randomness library for all.
 A lot of lotteries on Algorand and other blockchains are biased. Modulo remainder arithmetics is often used to determine the winner.
 This is mathematically incorrect. A [famous example of modulo bias](https://www.linkedin.com/pulse/why-firelottos-blockchain-based-random-engine-fair-kostas-chalkias/) is Firelotto.
 
-We present a PyTeal library for safe and unbiased random called lib_my_shuffle.py was developed and open-sourced. It provides random numbers
+We present [a PyTeal library for safe and unbiased random](https://github.com/arty-arty/promise/blob/master/lib_algo_random.py) lib_algo_random.py 
 
-Though it needs unbiased random, this Project is not a lottery at all. 
-It is a mathematical protocol to solve cheating in games once and for all. Plus a multidtude of other benefits.
+Though Promise needs unbiased random, this project is not a lottery at all. 
+Promise is a mathematical protocol to solve cheating in games once and for all. Plus a multidtude of other benefits.
 Read more to understand.
 
 ## A mathematical protocol 
