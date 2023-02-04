@@ -6,6 +6,18 @@ Safely blockchainify any puzzle game.
 
 The protocol combines two new technologies. A paired-content-escrow. A random-sneak-peek. Both were researched for this project.
 
+## Community contribution
+An unbiased PyTeal randomness library for all.
+
+A lot of lotteries on Algorand and other blockchains are biased. Modulo remainder arithmetics is often used to determine the winner.
+This is mathematically incorrect. A [famous example of modulo bias](https://www.linkedin.com/pulse/why-firelottos-blockchain-based-random-engine-fair-kostas-chalkias/) is Firelotto.
+
+We present a PyTeal library for safe and unbiased random called lib_my_shuffle.py was developed and open-sourced. It provides random numbers
+
+Though it needs unbiased random, this Project is not a lottery at all. 
+It is a mathematical protocol to solve cheating in games once and for all. Plus a multidtude of other benefits.
+Read more to understand.
+
 ## A mathematical protocol 
 
 There are games to tell stories. There are games to solve mysteries. If there is only one way to solve a level - only one answer - then Promise works.
