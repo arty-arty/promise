@@ -2,7 +2,7 @@
 
 Safely blockchainify any puzzle game with Algorand.
 
-See [a demo game protected by Promise](https://youtu.be/AinSxP7sn90) video. 
+See video demo of [a game protected by Promise](https://youtu.be/AinSxP7sn90).
 ## Original technology
 
 The protocol combines two new technologies. A paired-content-escrow. A random-sneak-peek. Both were researched for this project.
