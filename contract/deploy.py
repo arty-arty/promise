@@ -1,21 +1,17 @@
+import time
 from pyteal import *
 from beaker import *
 from algosdk.v2client import algod
 from algosdk.atomic_transaction_composer import (
-    TransactionSigner,
     TransactionWithSigner,
     AccountTransactionSigner,
-    MultisigTransactionSigner,
     AtomicTransactionComposer,
 )
 from algosdk.future.transaction import *
 from algosdk.mnemonic import to_private_key
-from algosdk.encoding import encode_address, decode_address
 import os
 from dotenv import load_dotenv
-from typing import Final, Literal
-from beaker.lib.storage import Mapping, List
-from hashlib import sha3_256, sha256
+from hashlib import sha256
 
 from contract import PromiseYou
 
@@ -30,17 +26,7 @@ MY_MNEMONIC = os.getenv('MY_MNEMONIC')
 signer = AccountTransactionSigner(private_key=to_private_key(MY_MNEMONIC))
 
 
-Hash = abi.StaticBytes[Literal[32]]
-Answer = abi.StaticBytes[Literal[32]]
-Question = abi.StaticBytes[Literal[32]]
-Salt = abi.StaticBytes[Literal[32]]
-
-# Create a class, subclassing Application from beaker
-
-# Just 1 for debugging
-
-
-def demo():
+def deploy():
     # Create an Application client
     app_client = client.ApplicationClient(
         # Get sandbox algod client
@@ -62,44 +48,54 @@ def demo():
     """
     )
 
-    salt_question = "fasdfsda"
-    salt_answer = "yh66534"
-    question = "Who created Algorand?"
-    answer = "Silvio Micali"
-    question_hash = sha256(
-        question.ljust(32, " ").encode('utf-8') +
-        salt_question.ljust(32, " ").encode('utf-8')
-    ).digest()
-    answer_hash = sha256(
-        (answer).ljust(32, " ").encode('utf-8') +
-        (salt_answer).ljust(32, " ").encode('utf-8'),
-    ).digest()
-    print(question_hash, answer_hash)
+    # Same questions should be put in oracle.py
+    questions = [
+        {"question": "Who created Algorand?", "answer": "Silvio Micali",
+         "salt_question": "fasdfsda", "salt_answer": "yh66534"},
+        {"question": "How many TPS Algorand has?", "answer": "6000",
+         "salt_question": "t4dgdfhgh5", "salt_answer": "abvg6hkl6w"},
+        {"question": "Who is Algorand CTO?", "answer": "John Woods",
+         "salt_question": "h1asdfgetafgh1mbnsajk", "salt_answer": "lakfgy75nbdhurjkcm1"}
+    ]
 
-    # .ljust(  32, " ").encode()
+    # Pay sufficient funds for box storage
     ptxn = PaymentTxn(app_client.sender, suggested_params,
                       app_addr, int(1000000*1.0))
     atc = AtomicTransactionComposer()
     atc.add_transaction(TransactionWithSigner(ptxn, signer))
     result = atc.execute(algod_client, 4)
-    for i in range(0, 3):
+
+    # Loops through all the questions and add hashed challenges
+    for i, challenge in enumerate(questions):
+        question_hash = sha256(
+            challenge["question"].ljust(32, " ").encode('utf-8') +
+            challenge["salt_question"].ljust(32, " ").encode('utf-8')
+        ).digest()
+        answer_hash = sha256(
+            challenge["answer"].ljust(32, " ").encode('utf-8') +
+            challenge["salt_answer"].ljust(32, " ").encode('utf-8'),
+        ).digest()
         app_client.call(PromiseYou.add_challenge, salted_question_hash=question_hash,
                         salted_answer_hash=answer_hash,
                         boxes=[[app_client.app_id, "salted_question_hashes"],
                                [app_client.app_id, "salted_answer_hashes"]])
         print(i)
-    print("Added Challenges", "Addres of adder: ")
+    print("Added All Challenges")
 
-    # import time
-    # time.sleep(10)
+    # Wait some time for the future round when VRF beacon can be resolved
+    time.sleep(10)
 
-    ptxn = PaymentTxn(app_client.sender, suggested_params,
-                      app_addr, int(1000000*1.0))
-    result = app_client.call(PromiseYou.resolve_shuffle, random_contract=110096026, payment=TransactionWithSigner(ptxn, signer),
-                             boxes=[[app_client.app_id, "permutation"],
-                                    [app_client.app_id, "permutation"]])
-    print("Resolved Shuffle", result.return_value)
+    # Call contract to resolve randomness and do unbiased Knuth-Yao shuffling of questions
+    app_client.call(PromiseYou.resolve_shuffle, random_contract=110096026, payment=TransactionWithSigner(ptxn, signer),
+                    boxes=[[app_client.app_id, "permutation"],
+                           [app_client.app_id, "permutation"]])
+    print("Resolved Shuffle")
+    print("")
+    print("The contract is ready for players and oracle")
+    print("Remember to put the app_id you got now in client.py and oracle.py")
+    print("")
+    print("Have a great day and thanks for using!")
 
 
 if __name__ == "__main__":
-    demo()
+    deploy()

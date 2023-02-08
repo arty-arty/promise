@@ -18,9 +18,11 @@ import array
 questions = [
     {"question": "Who created Algorand?", "answer": "Silvio Micali",
         "salt_question": "fasdfsda", "salt_answer": "yh66534"},
-    {"question": "Who created Algorand?", "answer": "Silvio Micali",
-        "salt_answer": "yh66534", "salt_question": "fasdfsda"},
-    {"question": "Who created Algorand?", "answer": "Silvio Micali", "salt_answer": "yh66534", "salt_question": "fasdfsda"}]
+    {"question": "How many TPS Algorand has?", "answer": "6000",
+        "salt_question": "t4dgdfhgh5", "salt_answer": "abvg6hkl6w"},
+    {"question": "Who is Algorand CTO?", "answer": "John Woods",
+        "salt_question": "h1asdfgetafgh1mbnsajk", "salt_answer": "lakfgy75nbdhurjkcm1"}
+]
 
 
 def getQuestionAnswer(n_challenge):
@@ -130,8 +132,8 @@ def postChallenge(personal_state_holder):
     # current_n_question = current_n_question + 1
 
 
-# Initialization. First launch deploy.py and write down your app id from the output. 
-app_id = 157599221
+# Initialization. First launch deploy.py and write down your app id from the output.
+app_id = 157715847
 load_dotenv()
 MY_MNEMONIC = os.getenv('MY_MNEMONIC')
 signer = AccountTransactionSigner(private_key=to_private_key(MY_MNEMONIC))
