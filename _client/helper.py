@@ -44,10 +44,12 @@ def getMyChallengeId(app_client, personal_state_holder):
     n_for_user.byteswap()
     return n_for_user[0]
 
-# Below are app_call wrappers to make code better readable
+# Below are app_call wrappers to make the code better readable
 
 
 def bookChallenge(app_client, suggested_params):
+    """Call the method of the contract which takes required collateral, 
+    and puts the user in a queue to receive his own challenge"""
     ptxn = PaymentTxn(app_client.sender, suggested_params,
                       app_client.app_addr, int(1000000*1.0))
     app_client.call(
@@ -60,6 +62,8 @@ def bookChallenge(app_client, suggested_params):
 
 
 def answerChallenge(app_client, answer):
+    """Call the method of the contract which stores user's answer 
+    to be later compared with server's ground truth."""
     app_client.call(PromiseYou.answer_challenge,
                     answer=answer.ljust(32, " ").encode(),
                     boxes=[
@@ -72,21 +76,25 @@ def answerChallenge(app_client, answer):
                     ])
 
 
-def refundNoReveal(app_client):
-    app_client.call(PromiseYou.no_reveal_refund,
-                    boxes=[
-                        [app_client.app_id, "STATE".encode(
-                        ) + decode_address(app_client.sender)],
-                        [app_client.app_id, "REVEAL_ROUND".encode(
-                        ) + decode_address(app_client.sender)],
-                    ])
-
-
 def refundNoPosted(app_client):
+    """Call the method of the contract which refunds a person. 
+    If the server did post the question in time."""
     app_client.call(PromiseYou.no_posted_refund,
                     boxes=[
                         [app_client.app_id, "STATE".encode(
                         ) + decode_address(app_client.sender)],
                         [app_client.app_id, "POST_ROUND".encode(
+                        ) + decode_address(app_client.sender)],
+                    ])
+
+
+def refundNoReveal(app_client):
+    """Call the method of the contract which refunds a person. 
+    If the server did not check his answer in time."""
+    app_client.call(PromiseYou.no_reveal_refund,
+                    boxes=[
+                        [app_client.app_id, "STATE".encode(
+                        ) + decode_address(app_client.sender)],
+                        [app_client.app_id, "REVEAL_ROUND".encode(
                         ) + decode_address(app_client.sender)],
                     ])

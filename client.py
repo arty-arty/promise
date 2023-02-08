@@ -9,14 +9,13 @@ import os
 from dotenv import load_dotenv
 
 from algosdk.encoding import decode_address
-from algosdk.v2client import indexer, algod
+from algosdk.v2client import algod
 from beaker import *
-import array
 from algosdk.atomic_transaction_composer import (
     AccountTransactionSigner,
 )
 
-from client.helper import fetchPersonalInfo, getMyChallengeId,\
+from _client.helper import fetchPersonalInfo, getMyChallengeId,\
     bookChallenge, answerChallenge, refundNoReveal, refundNoPosted
 
 # Initialization. Same app id as in oracle.py must be specified.
@@ -72,7 +71,7 @@ def step():
         print("Transaction succeeded. A question was booked.")
         print("Waiting a bit for the server to post a question.")
         print("")
-        time.sleep(15)
+        time.sleep(25)
 
     # Try to get a refund if the user has booked, but the server did not post the question.
     if state == b'2_YES_BOOKED':
@@ -83,9 +82,9 @@ def step():
         print("")
         time.sleep(15)
 
-    #
+    # Retrieve my question from the contract. Get answer from keyboard. Send the answer to contract.
     if state == b'3_YES_POSTED':
-        questions = fetchPersonalInfo(b"salted_question_hashes")[
+        questions = fetchPersonalInfo(app_client, b"salted_question_hashes")[
             b"salted_question_hashes"]
         n_for_user = getMyChallengeId(app_client, personal_state_holder)
         print("You booked a question with random index: ", n_for_user)

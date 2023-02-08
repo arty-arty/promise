@@ -149,11 +149,17 @@ class PromiseYou(Application):
     @external(authorize=Authorize.only(Global.creator_address()))
     def resolve_shuffle(self, random_contract: abi.Application, payment: abi.PaymentTransaction,):
         """
-        Once the future shuffle_round
+        Once the future shuffle_round has come this method can be triggered to retreive the random bits 
+        from the beacon and shuffle the questions using an unbiased algorithm. Now the state is set
+        to be ready for players. Shuffling again is forbidden by the state machine.
         """
-        # DO INNER TXN to RANDOM BEACON (by using internal method like in joe contract)
-        # USE internal method to shuffle refernece article in a comment
-        # Modulo Unbiased
+
+        # The following algorithm is an excerpt from out PyTeal library lib_algo_random to shuffle arrays, or have Uniform[0, n] random.
+        # The mathematical benefit - it has no modulo bias. Completely.
+        # No bias was achieved by using an optimized version of rejection sampling.
+        # Inspired by publication (https://dl.acm.org/doi/10.1145/3009909) with algorithm analysis and more insights.
+
+        # We developed the library during the hackathon for the open-source community of Algorand
         randomBits = ScratchVar(TealType.bytes)
         shuffle_round = abi.Uint64()
 
@@ -183,13 +189,14 @@ class PromiseYou(Application):
             )
         )
 
+        # Query the random beacon, use random bits to shuffle the questions, and change state to be ready for players.
         return Seq(
             Assert(self.status == Bytes("2_RESOLVE_PRNG_SHUFFLE")),
             Assert(random_contract.application_id() == Int(110096026)),
-            # Remove Int(10) in production. It's here just for speedy testing
+            # Please, remove Int(10) in production. It's here just for speedy testing
             Assert(Global.round() >= self.shuffle_round.get()),
             getRandomBits,
-            # Skip 6 bytes in case of this randomness beacon. For example ARC-4 reserves 4 bytes for a type prefix
+            # Skip 6 bytes in case of this randomness beacon. For example ARC-4 reserves 4 bytes for a type prefix.
             currBitN.store(Int(32 + 32)),
             Pop(self.permutation.create()),
             initPermutation,
@@ -291,6 +298,8 @@ class PromiseYou(Application):
     @external
     def answer_challenge(self, answer: Answer):
         """
+        When called just stores user answer in a box to be later compared with ground truth.
+        State checks preceed. 
         """
         booking_state = self.booking_state_records[Txn.sender()]
 
@@ -308,6 +317,10 @@ class PromiseYou(Application):
     @external(authorize=Authorize.only(Global.creator_address()))
     def reveal_answer(self, booker: abi.Address, answer: Answer, salt: Salt):
         """
+        This method is called by the oracle. The oracle publishes the true answer on-chain.
+        The answer hash must match the initial commitment. If the player did not answer / answered wrong at the time of
+        solution reveal, their collateral goes to the company wallet. If their answer matches truth,
+        the play earns ALGOs.
         """
         booking_state = self.booking_state_records[booker]
         challenge_id = self.challenge_id_records[booker]
@@ -344,13 +357,17 @@ class PromiseYou(Application):
             ).Else(Reject()),
             # Unblinding used answers
             salted_answer_hash.set(answer),
+            # Instead of booking_state.set(Bytes("1_NON_BOOKED")) we just remove the state.
             Pop(booking_state.delete()),
-            # booking_state.set(Bytes("1_NON_BOOKED"))
+
         )
 
     @external
     def no_reveal_refund(self):
         """
+        Method to protect the user. If the server did not reveal the true answer (pre-image of the commited hash). 
+        Whether it was down or did it on purpose. The user just calls this method and gets his prize.
+        Deincetivizes game company to lie. User is safe.
         """
         booking_state = self.booking_state_records[Txn.sender()]
         money_back = self.pay(Txn.sender(), consts.Algos(
@@ -362,6 +379,6 @@ class PromiseYou(Application):
                        reveal_round),
                    Assert(Global.round() >= reveal_round.get()),
                    money_back,
-                   # booking_state.set(Bytes("1_NON_BOOKED"))
+                   # Instead of booking_state.set(Bytes("1_NON_BOOKED")) we just remove the state.
                    Pop(booking_state.delete()),
                    )
